@@ -1,4 +1,4 @@
-package edu.eci.cvds;
+package edu.eci.cvds.patterns.archetype;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
