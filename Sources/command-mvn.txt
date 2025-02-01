@@ -1,0 +1,1 @@
+mvn archetype:generate -DgroupId=edu.eci.cvds -DartifactId=Patterns -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeVersion=1.5 -DinteractiveMode=false
