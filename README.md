@@ -355,3 +355,62 @@ mvn compile exec:java -Dexec.args="\"Pepito Perez\""
 ```
 ### Salida
 `SCREENSHOT`
+
+## Preguntas Investigación
+
+### Investigue para qué sirve "gitignore" y configurelo en su proyecto para evitar adjuntar archivos que no son relevantes para el proyecto.
+
+### ¿Para qué sirve `.gitignore`?
+El archivo `.gitignore` se utiliza para indicarle a Git qué archivos o directorios deben ser ignorados y no incluidos en el control de versiones. Esto ayuda a evitar subir archivos temporales, de compilación, logs y configuraciones locales de herramientas o IDEs, manteniendo el repositorio limpio y enfocado solo en el código fuente relevante.
+
+### ¿Cómo configurar `.gitignore` en tu proyecto?
+- Crear el archivo:
+En la raíz del repositorio (donde se encuentra el pom.xml si es un proyecto Maven), crear un archivo llamado `.gitignore`.
+
+- Agregar las reglas de exclusión:
+Escribir dentro del archivo los patrones de los archivos y carpetas que se quieren ignorar. Por ejemplo, para un proyecto Java con Maven, se puede incluir:
+
+``` py
+# Directorio de salida de Maven
+/target/
+
+# Archivos de configuración de Maven Wrapper (si se usan)
+!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+
+# Configuraciones de IDEs y archivos de proyecto
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# NetBeans
+nbproject/private/
+
+# Archivos de log y temporales
+*.log
+*.tmp
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+```
+
+### Guardar y añadir al repositorio
+Una vez configurado, guardar el archivo y realizar un commit:
+
+``` sh
+git add .gitignore
+git commit -m "Agregar archivo .gitignore para excluir archivos no relevantes"
+```
+
+### Nota
+Si ya se ha agregado al repositorio archivos que deberían ser ignorados, se deben eliminarlos del seguimiento de Git (sin borrarlos del disco) con el comando:
+
+```sh
+git rm --cached <archivo_o_directorio>
+```
