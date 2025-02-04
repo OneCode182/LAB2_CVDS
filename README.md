@@ -356,6 +356,182 @@ mvn compile exec:java -Dexec.args="\"Pepito Perez\""
 ### Salida
 `SCREENSHOT`
 
+
+## ESQUELETO DE LA APLICACIÓN
+
+Cree el paquete `edu.eci.cvds.patterns.shapes` y el paquete `edu.eci.cvds.patterns.shapes.concrete`.
+
+Cree una interfaz llamada `Shape.java` en el directorio `src/main/java/edu/eci/cvds/patterns/shapes` de la siguiente manera:
+```java
+package edu.eci.cvds.patterns.shapes;
+
+public interface Shape {
+    public int getNumberOfEdges();
+}
+```
+
+Cree una enumeración llamada `RegularShapeType.java` en el directorio `src/main/java/edu/eci/cvds/patterns/shapes` así:
+
+```java
+package edu.eci.cvds.patterns.shapes;
+
+public enum RegularShapeType {
+    Triangle, Quadrilateral, Pentagon, Hexagon
+}
+```
+
+En el directorio `src/main/java/edu/eci/cvds/patterns/shapes/concrete` cree las diferentes clases (Triangle, Quadrilateral, Pentagon, Hexagon), que implementen la interfaz creada y retornen el número correspondiente de vértices que tiene la figura. 
+
+Siguiendo el ejemplo del triángulo:
+```java
+package edu.eci.cvds.patterns.shapes.concrete;
+
+import edu.eci.cvds.patterns.shapes.Shape;
+
+public class Triangle implements Shape {
+    public int getNumberOfEdges() {
+        return 3;
+    }
+}
+```
+
+NOTA: Para las otras 3 figuras Quadrilateral, Pentagon, Hexagon. Agregar esa estructura y esta funcion
+
+### Quadrilateral
+```java
+public int getNumberOfEdges() {
+    return 4;
+}
+```   
+
+### Pentagon
+```java
+public int getNumberOfEdges() {
+    return 5;
+}
+```   
+
+### Hexagon
+```java
+public int getNumberOfEdges() {
+    return 6;
+}
+```   
+
+Cree el archivo `ShapeMain.java` en el directorio `src/main/java/edu/eci/cvds/patterns/shapes` con el metodo main:
+```java
+package edu.eci.cvds.patterns.shapes;
+
+public class ShapeMain {
+
+  public static void main(String[] args) {
+    if (args == null || args.length != 1) {
+      System.err.println("Parameter of type RegularShapeType is required.");
+      return;
+    }
+    try {
+      RegularShapeType type = RegularShapeType.valueOf(args[0]);
+      Shape shape = ShapeFactory.create(type);
+      System.out.println(
+        String.format(
+          "Successfully created a %s with %s sides.",
+          type,
+          shape.getNumberOfEdges()
+        )
+      );
+    } catch (IllegalArgumentException ex) {
+      System.err.println(
+        "Parameter '" + args[0] + "' is not a valid RegularShapeType"
+      );
+      return;
+    }
+  }
+}
+```
+
+Analice y asegúrese de entender cada una de las instrucciones que se encuentran en todas las clases que se crearon anteriormente. Cree el archivo `ShapeFactory.java` en el directorio `src/main/java/edu/eci/cvds/patterns/shapes` implementando el patrón fábrica (Hint: https://refactoring.guru/design-patterns/catalog), haciendo uso de la instrucción switch-case de Java y usando las enumeraciones.
+
+¿Cuál fábrica hiciste? y ¿Cuál es mejor?
+
+
+- Patron de Diseño elegido: `SimpleFactory`
+- #### La mejor opcion:
+  En este caso, la mejor opción para la implementación de *ShapeFactory.java* es `Simple Factory`, ya que nuestro objetivo es centralizar la creación de instancias de clases concretas (Triangle, Quadrilateral, Pentagon, Hexagon) basándonos en el tipo recibido como parámetro.
+
+### Codigo de `ShapeFactory`
+
+```java
+package edu.eci.cvds.patterns.shapes;
+import edu.eci.cvds.patterns.shapes.concrete.*;
+
+public class ShapeFactory {
+    public static Shape create(RegularShapeType type) {
+        switch (type) {
+            case Triangle:
+                return new Triangle();
+            case Quadrilateral:
+                return new Quadrilateral();
+            case Pentagon:
+                return new Pentagon();
+            case Hexagon:
+                return new Hexagon();
+            default:
+                throw new IllegalArgumentException("Invalid shape type: " + type);
+        } 
+
+    }
+}
+```
+### Ejecucion `ShapeMain` con Parámetros
+Ejecute múltiples veces la clase ShapeMain, usando el plugin exec de maven con los siguientes parámetros y verifique la salida en consola para cada una:
+
+### Configurar el `pom.xml`
+Buscar donde esta la etiqueta *mainClass* y poner la ruta de `ShapeMain`
+```xml
+<configuration>
+    <mainClass>edu.eci.cvds.patterns.shapes.ShapeMain</mainClass>
+</configuration>
+```
+
+### Comandos
+Como se modifico el `pom.xml` entonces toca recompilar el proyecto para que funcione:
+```sh
+mvn package
+```
+
+Ahora si ejecutar el programa:
+```sh
+mvn exec:java -Dexec.args="PARAMETRO"
+```
+Donde `PARAMETRO` es el parametro que se envia al main de *ShapeMain.java*
+
+### Ejecuciones
+
+- Sin parámetros
+
+![img](Screens/cmd1.png)
+
+- Parámetro: qwerty
+
+![img](Screens/cmd2.png)
+
+- Parámetro: pentagon
+
+![img](Screens/cmd3.png)
+
+- Parámetro: Hexagon
+
+![img](Screens/cmd4.png)
+
+¿Cuál(es) de las anteriores instrucciones se ejecutan y funcionan correctamente y por qué?
+Deberia ejecutarse tal cual y como esta la clase como esta en el codigo.
+
+1) Sin parametros el programa no puede crear ningun *Shape*
+2) Con `qwerty` no funciono pues no existe un *Shape* con ese nombre
+3) Con `pentagon` no funciono pues, aunque exista `Pentagon` como *Shape*, el programa no es sensible a mayusculas y minusculas. Entonces toca escribirlo con P mayuscula para que lo identifique
+4) Con `Hexagon` si funciono pues es un `Shape` valido
+
+
 ## Preguntas Investigación
 
 ### Investigue para qué sirve "gitignore" y configurelo en su proyecto para evitar adjuntar archivos que no son relevantes para el proyecto.

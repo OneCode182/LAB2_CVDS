@@ -99,7 +99,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>edu.eci.cvds.patterns.archetype.App</mainClass>
+          <mainClass>edu.eci.cvds.patterns.shapes.ShapeMain</mainClass>
         </configuration>
       </plugin>
 
